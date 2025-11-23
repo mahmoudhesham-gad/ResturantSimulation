@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import notification.Kitchen;
 import notification.Waiter;
+import menu.Menu;
 
 /**
  * Main restaurant system coordinator
@@ -15,6 +16,7 @@ public class Restaurant {
   private Kitchen kitchen;
   private List<Waiter> waiters;
   private Map<Integer, Order> currentOrders;
+  private List<Menu> menus;
 
   public Restaurant(String name) {
     this.name = name;
@@ -27,6 +29,10 @@ public class Restaurant {
   private void setupStaff() {
     waiters.add(new Waiter("John"));
     waiters.add(new Waiter("Sarah"));
+  }
+
+  public void addMenu(Menu menu) {
+    this.menus.add(menu);
   }
 
   public Order createOrder(String orderType) {
@@ -42,46 +48,14 @@ public class Restaurant {
     return order;
   }
 
-  public void displayMenu() {
-    System.out.println("\n" + "=".repeat(60));
-    System.out.println("Welcome to " + name + "!");
-    System.out.println("=".repeat(60));
-    System.out.println("\n--- MENU ---\n");
+  public void listMenus() {
+    for (Menu menu : this.menus) {
+      System.out.println(menu.getName());
+    }
+  }
 
-    System.out.println("PIZZAS:");
-    System.out.println("  1. Italian Margherita - $12.99");
-    System.out.println("  2. Eastern Shawarma Pizza - $14.99");
-    System.out.println("  3. Classic Pepperoni - $13.99");
-    System.out.println("  4. Vegetarian Pizza - $11.99");
-
-    System.out.println("\nBURGERS:");
-    System.out.println("  5. Chicken Burger - $8.99");
-    System.out.println("  6. Beef Burger - $10.99");
-    System.out.println("  7. Veggie Burger - $7.99");
-
-    System.out.println("\nPASTA:");
-    System.out.println("  8. Carbonara - $11.99");
-    System.out.println("  9. Bolognese - $12.99");
-    System.out.println("  10. Marinara - $10.99");
-
-    System.out.println("\nSALADS:");
-    System.out.println("  11. Caesar Salad - $6.99");
-    System.out.println("  12. Greek Salad - $7.99");
-    System.out.println("  13. Chicken Salad - $8.99");
-
-    System.out.println("\nDRINKS:");
-    System.out.println("  14. Coca Cola - $2.99");
-    System.out.println("  15. Orange Juice - $3.99");
-    System.out.println("  16. Coffee - $2.49");
-
-    System.out.println("\nADD-ONS:");
-    System.out.println("  - Extra Cheese (+$1.50)");
-    System.out.println("  - Sauce (+$0.75)");
-    System.out.println("  - Toppings (+$1.00)");
-    System.out.println("  - Extra Meat (+$2.50)");
-    System.out.println("  - Bacon (+$1.75)");
-
-    System.out.println("\n" + "=".repeat(60));
+  public void displayMenu(int menuId) {
+    this.menus.get(menuId).printMenu();
   }
 
   public Order getOrder(int orderId) {
