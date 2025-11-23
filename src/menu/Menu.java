@@ -1,10 +1,10 @@
 package menu;
 
-import menuitem.MenuItem;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import menuitem.MenuItem;
 
 public class Menu {
   Map<String, List<MenuItem>> itemsByCategory;
@@ -49,5 +49,9 @@ public class Menu {
 
   public String getName() {
     return this.name;
+  }
+
+  public Map<String, List<MenuItem>> getItemsByCategory() {
+    return this.itemsByCategory;
   }
 }
