@@ -169,7 +169,7 @@ public class Main {
   private static boolean orderFromMenu(Restaurant restaurant, Menu menu) {
     String orderType = selectOrderType();
     if (orderType == null)
-      return true;
+      return false;
 
     Order order = restaurant.createOrder(orderType);
     System.out.println("\n✓ Order #" + order.getOrderId() + " created (" + orderType + ")");
