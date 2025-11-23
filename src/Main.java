@@ -8,7 +8,7 @@ import payment.*;
 
 public class Main {
   private static Scanner scanner;
-  private static List<Restaurant> restaurants; 
+  private static List<Restaurant> restaurants;
 
   private static void setupRestaurants() {
     Restaurant restaurant1 = new Restaurant("Delicious Bites Restaurant");
@@ -71,15 +71,10 @@ public class Main {
     scanner = new Scanner(System.in);
     restaurants = new ArrayList<>();
     setupRestaurants();
-    Restaurant selectedRestaurant = selectRestaurant();
-    Menu selectedMenu = selectMenu(selectedRestaurant);
-     while (true) {
-      boolean continueOrdering = orderFromMenu(selectedRestaurant, selectedMenu);
-      if (!continueOrdering) break;
-    }
     runMainMenu();
     scanner.close();
   }
+
   private static void runMainMenu() {
     while (true) {
       System.out.println("\n" + "=".repeat(70));
@@ -92,7 +87,19 @@ public class Main {
       int choice = getIntInput();
 
       switch (choice) {
-        case 1 -> startOrderFlow();
+        case 1 -> {
+          Restaurant selectedRestaurant = selectRestaurant();
+          if (selectedRestaurant != null) {
+            Menu selectedMenu = selectMenu(selectedRestaurant);
+            if (selectedMenu != null) {
+              while (true) {
+                boolean continueOrdering = orderFromMenu(selectedRestaurant, selectedMenu);
+                if (!continueOrdering)
+                  break;
+              }
+            }
+          }
+        }
         case 0 -> {
           System.out.println("\nThank you for using our system. Goodbye!");
           return;
@@ -128,10 +135,9 @@ public class Main {
     }
   }
 
-
   private static Menu selectMenu(Restaurant restaurant) {
     List<Menu> menus = restaurant.getMenus();
-    
+
     while (true) {
       System.out.println("\n" + "=".repeat(70));
       System.out.println("LAYER 2: SELECT MENU");
@@ -162,7 +168,8 @@ public class Main {
 
   private static boolean orderFromMenu(Restaurant restaurant, Menu menu) {
     String orderType = selectOrderType();
-    if (orderType == null) return true;
+    if (orderType == null)
+      return true;
 
     Order order = restaurant.createOrder(orderType);
     System.out.println("\n✓ Order #" + order.getOrderId() + " created (" + orderType + ")");
@@ -177,7 +184,7 @@ public class Main {
     selectPaymentMethod(order);
 
     boolean confirmed = confirmOrder(order);
-    
+
     if (confirmed) {
       System.out.println("\n✓ Order completed successfully!");
       System.out.print("\nWould you like to place another order? (y/n): ");
@@ -198,14 +205,22 @@ public class Main {
       System.out.println("3. Delivery");
       System.out.println("0. Back to Menu Selection");
       System.out.print("\nSelect order type: ");
-      
+
       int typeChoice = getIntInput();
 
       switch (typeChoice) {
-        case 1 -> { return "Dine-in"; }
-        case 2 -> { return "Takeaway"; }
-        case 3 -> { return "Delivery"; }
-        case 0 -> { return null; }
+        case 1 -> {
+          return "Dine-in";
+        }
+        case 2 -> {
+          return "Takeaway";
+        }
+        case 3 -> {
+          return "Delivery";
+        }
+        case 0 -> {
+          return null;
+        }
         default -> System.out.println("\nInvalid choice. Please try again.");
       }
     }
@@ -241,7 +256,9 @@ public class Main {
             return true;
           }
         }
-        case 0 -> { return false; }
+        case 0 -> {
+          return false;
+        }
         default -> System.out.println("\nInvalid choice. Please try again.");
       }
     }
@@ -250,7 +267,7 @@ public class Main {
   private static MenuItem selectItemFromMenu(Menu menu) {
     Map<String, List<MenuItem>> itemsByCategory = menu.getItemsByCategory();
     List<MenuItem> allItems = new ArrayList<>();
-    
+
     for (List<MenuItem> items : itemsByCategory.values()) {
       allItems.addAll(items);
     }
@@ -263,12 +280,12 @@ public class Main {
     System.out.println("\n" + "-".repeat(70));
     System.out.println("SELECT ITEM");
     System.out.println("-".repeat(70));
-    
+
     for (int i = 0; i < allItems.size(); i++) {
       MenuItem item = allItems.get(i);
-      System.out.println((i + 1) + ". " + item.getName() + " - $" + 
-                         String.format("%.2f", item.getPrice()) + 
-                         " (" + item.getCategory() + ")");
+      System.out.println((i + 1) + ". " + item.getName() + " - $" +
+          String.format("%.2f", item.getPrice()) +
+          " (" + item.getCategory() + ")");
     }
     System.out.println("0. Back");
     System.out.print("\nSelect item: ");
@@ -328,7 +345,9 @@ public class Main {
           item = new BaconDecorator(item);
           System.out.println("✓ Added Bacon");
         }
-        case 0 -> { return item; }
+        case 0 -> {
+          return item;
+        }
         default -> System.out.println("Invalid choice.");
       }
     }
