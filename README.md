@@ -5,26 +5,34 @@ A modular and extensible restaurant ordering system demonstrating **SOLID princi
 ## 🎯 Project Overview
 
 This system simulates a complete restaurant workflow from ordering to billing, featuring:
-- Menu browsing with multiple item types
-- Customizable meals with add-ons
+- Interactive menu browsing with multiple categories
+- Customizable meals with add-ons (decorators)
 - Multiple payment methods
 - Dynamic discount strategies
 - Real-time notifications to kitchen and waiters
+- Menu builder pattern for organizing items
 
 ## 📁 Project Structure (Feature-Based Organization)
 
 ```
-src/com/restaurant/
-├── menuitem/              # Menu Item Component (Factory + Decorator Patterns)
-│   ├── MenuItem.java     # Abstract base class
+src/
+├── menuitem/              # Menu Item Component (Factory Pattern)
+│   ├── MenuItem.java      # Abstract base class
 │   ├── Pizza.java, Burger.java, Salad.java, Pasta.java, Drink.java
-│   ├── MenuItemFactory.java        # Factory Method Pattern
-│   ├── AddOnDecorator.java         # Decorator Pattern (Abstract)
-│   └── ExtraCheeseDecorator.java, SauceDecorator.java, etc.
+│   └── MenuItemFactory.java        # Factory Method Pattern
+│
+├── addon/                 # Add-on Decorators (Decorator Pattern)
+│   ├── AddOnDecorator.java         # Abstract decorator
+│   └── ExtraCheeseDecorator.java, SauceDecorator.java, 
+│       BaconDecorator.java, ToppingDecorator.java, ExtraMeatDecorator.java
+│
+├── menu/                  # Menu Management (Builder Pattern)
+│   ├── Menu.java          # Menu container
+│   └── MenuBuilder.java   # Builder for creating menus
 │
 ├── order/                 # Order Management Component
-│   ├── Order.java        # Order with payment and discount handling
-│   └── Restaurant.java   # Restaurant coordinator
+│   ├── Order.java         # Order with payment and discount handling
+│   └── Restaurant.java    # Restaurant coordinator
 │
 ├── payment/               # Payment Component (Strategy Pattern)
 │   ├── PaymentStrategy.java
@@ -32,13 +40,13 @@ src/com/restaurant/
 │
 ├── discount/              # Discount Component (Strategy Pattern)
 │   ├── DiscountStrategy.java
-│   └── ChickenDiscount.java, MeatDiscount.java, PizzaDiscount.java, etc.
+│   └── MondayDiscount.java, FridayDiscount.java, CustomDiscount.java
 │
 ├── notification/          # Notification Component (Observer Pattern)
 │   ├── Observer.java, Subject.java
 │   └── Kitchen.java, Waiter.java
 │
-└── Main.java             # Application entry point with demo scenarios
+└── Main.java              # Interactive application entry point
 ```
 
 ## 🎨 Design Patterns Implemented
@@ -47,20 +55,24 @@ src/com/restaurant/
 - **Purpose**: Create different menu items (Pizza, Burger, Salad, Pasta, Drink)
 - **Benefit**: Encapsulates object creation, easy to add new items
 
-### 2. **Decorator Pattern** (`menuitem/`)
-- **Purpose**: Add customizations (extra cheese, sauces, toppings) dynamically
+### 2. **Decorator Pattern** (`addon/`)
+- **Purpose**: Add customizations (extra cheese, sauces, toppings, bacon, extra meat) dynamically
 - **Benefit**: Flexible alternative to subclassing, chain multiple decorators
 
-### 3. **Observer Pattern** (`notification/`)
+### 3. **Builder Pattern** (`menu/`)
+- **Purpose**: Construct menu objects with multiple items in a step-by-step manner
+- **Benefit**: Separates menu construction from representation, creates different menu types
+
+### 4. **Observer Pattern** (`notification/`)
 - **Purpose**: Notify Kitchen and Waiters when orders are placed
 - **Benefit**: Loose coupling between Order and notification recipients
 
-### 4. **Strategy Pattern - Payment** (`payment/`)
+### 5. **Strategy Pattern - Payment** (`payment/`)
 - **Purpose**: Support multiple payment methods interchangeably
 - **Benefit**: Easy to add new payment methods without changing Order class
 
-### 5. **Strategy Pattern - Discount** (`discount/`)
-- **Purpose**: Apply different discount algorithms based on item categories
+### 6. **Strategy Pattern - Discount** (`discount/`)
+- **Purpose**: Apply different discount algorithms (Monday specials, Friday deals, custom discounts)
 - **Benefit**: Each discount logic is encapsulated and swappable
 
 ## 🔧 SOLID Principles
@@ -94,127 +106,154 @@ src/com/restaurant/
 - `Order` depends on `PaymentStrategy` interface, not concrete classes
 - `Subject` depends on `Observer` interface
 
-## 🚀 How to Build & Run
+## 🚀 How to Run the Project
 
-### Compile:
+### Prerequisites
+- Java 8 or higher installed on your system
+- Terminal/Command prompt
+
+### Compile the Project
+Navigate to the `src` directory and compile all Java files:
 ```bash
 cd src
-javac com/restaurant/**/*.java com/restaurant/*.java
+javac *.java addon/*.java discount/*.java menu/*.java menuitem/*.java notification/*.java order/*.java payment/*.java
 ```
 
-### Run:
+### Run the Application
+After compilation, run the main program:
 ```bash
-java com.restaurant.Main
+java Main
 ```
 
-### Or using a single command:
+### Using a Single Command
+You can compile and run in one step:
 ```bash
-cd src && javac com/restaurant/**/*.java com/restaurant/*.java && java com.restaurant.Main
+cd src && javac *.java addon/*.java discount/*.java menu/*.java menuitem/*.java notification/*.java order/*.java payment/*.java && java Main
 ```
 
-## 📝 Test Scenarios Included
+## 🧪 Test Case Example
 
-The `Main.java` demonstrates 5 complete scenarios:
+The application provides an interactive ordering system. Here's a sample test scenario:
 
-### Scenario 1: Pizza Party
-- 3 customized pizzas + drink
-- **Discount**: 10% off all pizzas
-- **Payment**: Credit Card
+### Test Scenario: Customer Orders a Customized Meal
 
-### Scenario 2: Chicken Special Day
-- Chicken burger + chicken salad + drinks
-- **Discount**: 15% off chicken items
-- **Payment**: Mobile Wallet
+**Steps:**
+1. Run the application: `java Main`
+2. Select a restaurant from the list
+3. Choose "Place a new order"
+4. Select a menu category (e.g., "Non-Vegetarian Menu")
+5. Add items to your order:
+   - Select a Pepperoni Pizza
+   - Apply decorators: Add Extra Cheese (+$1.50) and Extra Meat (+$2.50)
+   - Select a Coke drink
+6. Finish adding items
+7. Apply a discount (e.g., Monday Discount for 15% off)
+8. Choose payment method (e.g., Credit Card)
+9. Complete the order
 
-### Scenario 3: Meat Monday
-- Beef burger + bolognese pasta + salad
-- **Discount**: 20% off meat/beef items
-- **Payment**: Cash
-
-### Scenario 4: Combo Deal
-- Burger + pasta + salad + drink (4 items)
-- **Discount**: $5 off for 3+ items
-- **Payment**: Credit Card
-
-### Scenario 5: Highly Customized Order
-- Heavily decorated burger and pizza
-- **Discount**: None
-- **Payment**: Mobile Wallet
-
-## 📊 Sample Output
-
+**Expected Output:**
 ```
 ============================================================
 ORDER #1001 - Dine-in
 ============================================================
 
 Items:
-1. Italian Margherita Pizza - $12.99 + Extra Cheese (+$1.50) + Olives (+$1.00)
-2. Classic Pepperoni Pizza - $13.99 + Extra Meat (+$2.50)
-3. Eastern Shawarma Pizza - $14.99
-4. Coca Cola - $2.99
+1. Classic Pepperoni Pizza - $13.99 + Extra Cheese (+$1.50) + Extra Meat (+$2.50)
+2. Coca Cola - $2.99
 
 ------------------------------------------------------------
-Subtotal:        $   49.96
-Tax (10%):       $    5.00
-Discount (Pizza Party (10% off)): -$    4.70
+Subtotal:        $   20.98
+Tax (10%):       $    2.10
+Discount (Monday Discount (15% off)): -$    3.15
 ------------------------------------------------------------
-TOTAL:           $   50.26
+TOTAL:           $   19.93
 ============================================================
 
-Processing Credit Card Payment of $50.26
-Card ending in: ****3456
+Processing Credit Card Payment of $19.93
+Card ending in: ****1234
 Payment successful!
 
 [KITCHEN NOTIFICATION]
 New Order #1001 received!
 Items to prepare:
-  - Italian Margherita Pizza - $12.99 + Extra Cheese (+$1.50) + Olives (+$1.00)
-  ...
+  - Classic Pepperoni Pizza - $13.99 + Extra Cheese (+$1.50) + Extra Meat (+$2.50)
+  - Coca Cola - $2.99
+
+[WAITER NOTIFICATION]
+New Order #1001 for Table service!
+Total: $19.93
 ```
+
+**Verification Points:**
+- ✓ Factory pattern creates the correct menu items
+- ✓ Decorator pattern applies add-ons with correct pricing
+- ✓ Builder pattern organizes menu categories
+- ✓ Strategy pattern applies the correct discount algorithm
+- ✓ Strategy pattern processes payment successfully
+- ✓ Observer pattern notifies Kitchen and Waiter
+- ✓ Final price calculation includes all add-ons, tax, and discount
 
 ## 🔄 Extensibility Examples
 
 ### Add New Menu Item:
 ```java
-// 1. Create new class
-public class Dessert extends MenuItem { ... }
+// 1. Create new class extending MenuItem
+public class Dessert extends MenuItem {
+    public Dessert(String name, String variant, double price) {
+        super(name, variant, price, "Dessert");
+    }
+}
 
-// 2. Add to factory
-public static MenuItem createDessert(String variant) { ... }
+// 2. Add to MenuItemFactory
+case "dessert":
+    return createDessert(variant);
 
 // No changes to existing code!
 ```
 
 ### Add New Decorator:
 ```java
-// Create new decorator
+// Create new decorator extending AddOnDecorator
 public class SpiceDecorator extends AddOnDecorator {
-    @Override
-    public double getPrice() {
-        return menuItem.getPrice() + 0.50;
+    public SpiceDecorator(MenuItem menuItem) {
+        super(menuItem, "Spicy Sauce", 0.50);
     }
-    ...
 }
 // Use it: item = new SpiceDecorator(item);
 ```
 
 ### Add New Payment Method:
 ```java
-// Implement interface
-public class CryptoPayment implements PaymentStrategy { ... }
-
-// Use it
-order.setPaymentStrategy(new CryptoPayment("wallet_address"));
+// Implement PaymentStrategy interface
+public class CryptoPayment implements PaymentStrategy {
+    private String walletAddress;
+    
+    @Override
+    public boolean pay(double amount) {
+        // Implementation
+    }
+    
+    @Override
+    public String getPaymentType() {
+        return "Cryptocurrency";
+    }
+}
 ```
 
 ### Add New Discount:
 ```java
-// Implement interface
-public class SeafoodDiscount implements DiscountStrategy { ... }
-
-// Use it
-order.setDiscountStrategy(new SeafoodDiscount());
+// Implement DiscountStrategy interface
+public class WeekendDiscount implements DiscountStrategy {
+    @Override
+    public double calculateDiscount(double subtotal) {
+        return subtotal * 0.20; // 20% off
+    }
+    
+    @Override
+    public String getDiscountName() {
+        return "Weekend Special (20% off)";
+    }
+}
 ```
 
 ## 📦 Dependencies
@@ -224,37 +263,42 @@ order.setDiscountStrategy(new SeafoodDiscount());
 
 ## 👥 Team Information
 
-This project is designed for a team of 2 students as per assignment requirements.
+This project is designed as an ASE (Advanced Software Engineering) assignment demonstrating best practices in object-oriented design.
 
-## 📄 Deliverables
+## 📄 Key Features
 
-- ✅ Source Code (fully functional and commented)
-- ✅ UML Class Diagram (see JAVA_STRUCTURE.md)
-- ✅ Design Decisions Document (see JAVA_STRUCTURE.md)
-- ✅ README with instructions and test cases
+- ✅ Interactive console-based ordering system
+- ✅ Multiple restaurant support with different menus
+- ✅ Menu organization using Builder pattern
+- ✅ Dynamic item customization with Decorator pattern
+- ✅ Flexible payment and discount strategies
+- ✅ Real-time notifications to kitchen and service staff
+- ✅ Clean architecture following SOLID principles
 
 ## 🏆 Evaluation Criteria Coverage
 
 | Criteria | Coverage |
 |----------|----------|
 | **SOLID Principles (20%)** | All 5 principles demonstrated |
-| **Design Patterns (50%)** | 4 patterns correctly implemented |
+| **Design Patterns (50%)** | 6 patterns correctly implemented |
 | **Code Structure (10%)** | Feature-based organization, clean code |
-| **UML & Clarity (20%)** | Clear structure, well-documented |
+| **Functionality (20%)** | Interactive, fully functional system |
 
 ## 📚 Additional Notes
 
 - Code follows Java naming conventions
-- All classes are properly documented
+- All classes are properly documented with comments
 - Feature-based organization keeps related classes together
-- Each component is independently testable
-- Easy to extend without modifying existing code
+- Each component is independently testable and maintainable
+- Easy to extend without modifying existing code (Open/Closed Principle)
+- Interactive menu system provides user-friendly experience
 
 ## 🎓 Learning Outcomes
 
 This project demonstrates:
-- Proper application of design patterns
+- Proper application of design patterns in real-world scenarios
 - SOLID principles in practice
-- Clean code architecture
+- Clean code architecture and separation of concerns
 - Extensible and maintainable design
-- Real-world software engineering practices
+- Professional software engineering practices
+- Interactive application development in Java
