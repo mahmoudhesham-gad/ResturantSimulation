@@ -5,6 +5,7 @@ A modular and extensible restaurant ordering system demonstrating **SOLID princi
 ## 🎯 Project Overview
 
 This system simulates a complete restaurant workflow from ordering to billing, featuring:
+
 - Interactive menu browsing with multiple categories
 - Customizable meals with add-ons (decorators)
 - Multiple payment methods
@@ -23,7 +24,7 @@ src/
 │
 ├── addon/                 # Add-on Decorators (Decorator Pattern)
 │   ├── AddOnDecorator.java         # Abstract decorator
-│   └── ExtraCheeseDecorator.java, SauceDecorator.java, 
+│   └── ExtraCheeseDecorator.java, SauceDecorator.java,
 │       BaconDecorator.java, ToppingDecorator.java, ExtraMeatDecorator.java
 │
 ├── menu/                  # Menu Management (Builder Pattern)
@@ -52,32 +53,39 @@ src/
 ## 🎨 Design Patterns Implemented
 
 ### 1. **Factory Method Pattern** (`menuitem/`)
+
 - **Purpose**: Create different menu items (Pizza, Burger, Salad, Pasta, Drink)
 - **Benefit**: Encapsulates object creation, easy to add new items
 
 ### 2. **Decorator Pattern** (`addon/`)
+
 - **Purpose**: Add customizations (extra cheese, sauces, toppings, bacon, extra meat) dynamically
 - **Benefit**: Flexible alternative to subclassing, chain multiple decorators
 
 ### 3. **Builder Pattern** (`menu/`)
+
 - **Purpose**: Construct menu objects with multiple items in a step-by-step manner
 - **Benefit**: Separates menu construction from representation, creates different menu types
 
 ### 4. **Observer Pattern** (`notification/`)
+
 - **Purpose**: Notify Kitchen and Waiters when orders are placed
 - **Benefit**: Loose coupling between Order and notification recipients
 
 ### 5. **Strategy Pattern - Payment** (`payment/`)
+
 - **Purpose**: Support multiple payment methods interchangeably
 - **Benefit**: Easy to add new payment methods without changing Order class
 
 ### 6. **Strategy Pattern - Discount** (`discount/`)
+
 - **Purpose**: Apply different discount algorithms (Monday specials, Friday deals, custom discounts)
 - **Benefit**: Each discount logic is encapsulated and swappable
 
 ## 🔧 SOLID Principles
 
 ### Single Responsibility Principle (SRP)
+
 - Each class has one reason to change
 - `MenuItem`: Manages item data only
 - `MenuItemFactory`: Creates menu items only
@@ -85,23 +93,27 @@ src/
 - Each strategy: Implements one payment/discount method
 
 ### Open/Closed Principle (OCP)
+
 - Open for extension, closed for modification
 - Add new menu items by extending `MenuItem`
 - Add new decorators without changing existing ones
 - Add new payment/discount strategies without modifying `Order`
 
 ### Liskov Substitution Principle (LSP)
+
 - All `MenuItem` subclasses interchangeable
 - All decorators can wrap any `MenuItem`
 - All strategies swappable in their contexts
 
 ### Interface Segregation Principle (ISP)
+
 - Small, focused interfaces
 - `Observer`: Only `update()` method
 - `PaymentStrategy`: Only `pay()` and `getPaymentType()`
 - `DiscountStrategy`: Only `calculateDiscount()` and `getDiscountName()`
 
 ### Dependency Inversion Principle (DIP)
+
 - Depend on abstractions, not concrete classes
 - `Order` depends on `PaymentStrategy` interface, not concrete classes
 - `Subject` depends on `Observer` interface
@@ -109,24 +121,31 @@ src/
 ## 🚀 How to Run the Project
 
 ### Prerequisites
+
 - Java 8 or higher installed on your system
 - Terminal/Command prompt
 
 ### Compile the Project
+
 Navigate to the `src` directory and compile all Java files:
+
 ```bash
 cd src
 javac *.java addon/*.java discount/*.java menu/*.java menuitem/*.java notification/*.java order/*.java payment/*.java
 ```
 
 ### Run the Application
+
 After compilation, run the main program:
+
 ```bash
 java Main
 ```
 
 ### Using a Single Command
+
 You can compile and run in one step:
+
 ```bash
 cd src && javac *.java addon/*.java discount/*.java menu/*.java menuitem/*.java notification/*.java order/*.java payment/*.java && java Main
 ```
@@ -138,6 +157,7 @@ The application provides an interactive ordering system. Here's a sample test sc
 ### Test Scenario: Customer Orders a Customized Meal
 
 **Steps:**
+
 1. Run the application: `java Main`
 2. Select a restaurant from the list
 3. Choose "Place a new order"
@@ -152,6 +172,7 @@ The application provides an interactive ordering system. Here's a sample test sc
 9. Complete the order
 
 **Expected Output:**
+
 ```
 ============================================================
 ORDER #1001 - Dine-in
@@ -185,6 +206,7 @@ Total: $19.93
 ```
 
 **Verification Points:**
+
 - ✓ Factory pattern creates the correct menu items
 - ✓ Decorator pattern applies add-ons with correct pricing
 - ✓ Builder pattern organizes menu categories
@@ -196,6 +218,7 @@ Total: $19.93
 ## 🔄 Extensibility Examples
 
 ### Add New Menu Item:
+
 ```java
 // 1. Create new class extending MenuItem
 public class Dessert extends MenuItem {
@@ -212,6 +235,7 @@ case "dessert":
 ```
 
 ### Add New Decorator:
+
 ```java
 // Create new decorator extending AddOnDecorator
 public class SpiceDecorator extends AddOnDecorator {
@@ -223,16 +247,17 @@ public class SpiceDecorator extends AddOnDecorator {
 ```
 
 ### Add New Payment Method:
+
 ```java
 // Implement PaymentStrategy interface
 public class CryptoPayment implements PaymentStrategy {
     private String walletAddress;
-    
+
     @Override
     public boolean pay(double amount) {
         // Implementation
     }
-    
+
     @Override
     public String getPaymentType() {
         return "Cryptocurrency";
@@ -241,6 +266,7 @@ public class CryptoPayment implements PaymentStrategy {
 ```
 
 ### Add New Discount:
+
 ```java
 // Implement DiscountStrategy interface
 public class WeekendDiscount implements DiscountStrategy {
@@ -248,7 +274,7 @@ public class WeekendDiscount implements DiscountStrategy {
     public double calculateDiscount(double subtotal) {
         return subtotal * 0.20; // 20% off
     }
-    
+
     @Override
     public String getDiscountName() {
         return "Weekend Special (20% off)";
@@ -275,15 +301,6 @@ This project is designed as an ASE (Advanced Software Engineering) assignment de
 - ✅ Real-time notifications to kitchen and service staff
 - ✅ Clean architecture following SOLID principles
 
-## 🏆 Evaluation Criteria Coverage
-
-| Criteria | Coverage |
-|----------|----------|
-| **SOLID Principles (20%)** | All 5 principles demonstrated |
-| **Design Patterns (50%)** | 6 patterns correctly implemented |
-| **Code Structure (10%)** | Feature-based organization, clean code |
-| **Functionality (20%)** | Interactive, fully functional system |
-
 ## 📚 Additional Notes
 
 - Code follows Java naming conventions
@@ -296,6 +313,7 @@ This project is designed as an ASE (Advanced Software Engineering) assignment de
 ## 🎓 Learning Outcomes
 
 This project demonstrates:
+
 - Proper application of design patterns in real-world scenarios
 - SOLID principles in practice
 - Clean code architecture and separation of concerns
