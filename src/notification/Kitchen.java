@@ -13,7 +13,6 @@ public class Kitchen implements Observer {
     for (String item : items) {
       System.out.println("  - " + item);
     }
-    System.out.printf("Order Total: $%.2f\n", total);
   }
 
   public String getName() {

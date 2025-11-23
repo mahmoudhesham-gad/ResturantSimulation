@@ -23,6 +23,7 @@ public class Restaurant {
     this.kitchen = new Kitchen();
     this.waiters = new ArrayList<>();
     this.currentOrders = new HashMap<>();
+    this.menus = new ArrayList<>();
     setupStaff();
   }
 
@@ -49,9 +50,18 @@ public class Restaurant {
   }
 
   public void listMenus() {
-    for (Menu menu : this.menus) {
-      System.out.println(menu.getName());
+    if (menus.isEmpty()) {
+      System.out.println("No menus available.");
+      return;
     }
+    
+    for (int i = 0; i < menus.size(); i++) {
+      System.out.println((i + 1) + ". " + menus.get(i).getName());
+    }
+  }
+
+  public List<Menu> getMenus() {
+    return this.menus;
   }
 
   public void displayMenu(int menuId) {

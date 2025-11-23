@@ -1,11 +1,11 @@
 package order;
 
+import discount.DiscountStrategy;
 import java.util.ArrayList;
 import java.util.List;
 import menuitem.MenuItem;
-import payment.PaymentStrategy;
-import discount.DiscountStrategy;
 import notification.Subject;
+import payment.PaymentStrategy;
 
 /**
  * Order class manages order items and handles payment/discounts
@@ -128,5 +128,9 @@ public class Order extends Subject {
 
   public int getOrderId() {
     return orderId;
+  }
+
+  public List<MenuItem> getItems() {
+    return items;
   }
 }
