@@ -11,7 +11,7 @@ public class CustomDiscount implements DiscountStrategy {
 
   @Override
   public double calculateDiscount(double total) {
-    return total / this.fixedDiscount;
+    return total * (this.fixedDiscount/100);
   }
 
   @Override

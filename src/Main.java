@@ -112,7 +112,7 @@ public class Main {
   private static Restaurant selectRestaurant() {
     while (true) {
       System.out.println("\n" + "=".repeat(70));
-      System.out.println("LAYER 1: SELECT RESTAURANT");
+      System.out.println("SELECT RESTAURANT");
       System.out.println("=".repeat(70));
 
       for (int i = 0; i < restaurants.size(); i++) {
@@ -140,7 +140,7 @@ public class Main {
 
     while (true) {
       System.out.println("\n" + "=".repeat(70));
-      System.out.println("LAYER 2: SELECT MENU");
+      System.out.println("SELECT MENU");
       System.out.println("Restaurant: " + restaurant.getName());
       System.out.println("=".repeat(70));
 
@@ -303,6 +303,9 @@ public class Main {
   }
 
   private static MenuItem addDecorators(MenuItem item) {
+    if (item.getCategory().equalsIgnoreCase("drink")) {
+      return item; // No add-ons for drinks
+    }
     while (true) {
       System.out.println("\n" + "-".repeat(70));
       System.out.println("ADD-ONS FOR: " + item.getDescription());
